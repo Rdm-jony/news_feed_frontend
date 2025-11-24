@@ -14,7 +14,7 @@ import Image from "next/image";
 import { userLogin } from "@/services/auth/LoginUser";
 import { toast } from "sonner";
 import ButtonLoader from "../shared/ButtonLoader";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 const logninFormSchema = z.object({
     email: z.email({
         message: "email is required",
