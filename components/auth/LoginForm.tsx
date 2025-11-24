@@ -7,7 +7,6 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button';
 import { EyeIcon, Mail } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import Link from 'next/link';
@@ -15,6 +14,7 @@ import Image from "next/image";
 import { userLogin } from "@/services/auth/LoginUser";
 import { toast } from "sonner";
 import ButtonLoader from "../shared/ButtonLoader";
+import { useRouter } from "next/router";
 const logninFormSchema = z.object({
     email: z.email({
         message: "email is required",
@@ -24,6 +24,7 @@ const logninFormSchema = z.object({
 })
 
 const LoginForm = () => {
+    const router = useRouter()
     const [loading, setLoading] = useState(false)
 
     const form = useForm<z.infer<typeof logninFormSchema>>({
@@ -39,6 +40,7 @@ const LoginForm = () => {
             const result = await userLogin(values)
             if (result.success) {
                 toast.success(result.message)
+                router.push("/")
             }
         } catch (error: any) {
             toast.error(error.message || "something went wrong")
@@ -52,7 +54,7 @@ const LoginForm = () => {
         <div
             className="min-h-screen w-full flex items-center justify-end bg-left bg-contain bg-no-repeat"
             style={{
-                backgroundImage: "url('/login.png')",  
+                backgroundImage: "url('/login.png')",
             }}
         >
             <div className="bg-white backdrop-blur-md p-8 rounded-xl shadow-lg w-full max-w-md mr-20">

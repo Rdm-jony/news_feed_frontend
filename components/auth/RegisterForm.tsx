@@ -13,6 +13,7 @@ import ButtonLoader from "../shared/ButtonLoader";
 import Link from "next/link";
 import { userRegister } from "@/services/auth/registerUser";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export const RegisterFormSchema = z.object({
     firstName: z
@@ -41,6 +42,7 @@ export const RegisterFormSchema = z.object({
 
 
 const RegisterForm = () => {
+    const router = useRouter()
     const [loading, setLoading] = useState(false)
 
     const form = useForm<z.infer<typeof RegisterFormSchema>>({
@@ -58,6 +60,7 @@ const RegisterForm = () => {
             const result = await userRegister(values)
             if (result.success) {
                 toast.success(result.message)
+                router.push("/")
             }
         } catch (error: any) {
             toast.error(error.message || "something went wrong")
