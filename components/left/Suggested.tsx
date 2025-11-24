@@ -23,7 +23,7 @@ const people = [
 
 export default function SuggestedPeople() {
     return (
-        <div className="w-full bg-white rounded-xl shadow-sm p-4">
+        <div className="w-full  rounded-xl shadow-sm p-4">
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-semibold text-gray-900">Suggested People</h2>
@@ -47,13 +47,12 @@ export default function SuggestedPeople() {
                                 className="rounded-full object-cover"
                             />
                             <div>
-                                <h3 className="font-semibold text-gray-800">{person.name}</h3>
-                                <p className="text-sm text-gray-500">{person.role}</p>
+                                <h3 className="font-semibold text-sm text-gray-800">{person.name}</h3>
+                                <p className="text-xs mt-1 text-gray-500">{person.role}</p>
                             </div>
                         </div>
 
-                        <Button variant="outline" className="text-gray-500">
-                            <UserPlus size={16} />
+                        <Button variant="outline" size="sm" className="text-gray-500">
                             Connect
                         </Button>
                     </div>
