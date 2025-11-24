@@ -14,6 +14,7 @@ import Link from 'next/link';
 import Image from "next/image";
 import { userLogin } from "@/services/auth/LoginUser";
 import { toast } from "sonner";
+import ButtonLoader from "../shared/ButtonLoader";
 const logninFormSchema = z.object({
     email: z.email({
         message: "email is required",
@@ -25,7 +26,6 @@ const logninFormSchema = z.object({
 const LoginForm = () => {
     const [loading, setLoading] = useState(false)
 
-    const router = useRouter()
     const form = useForm<z.infer<typeof logninFormSchema>>({
         resolver: zodResolver(logninFormSchema),
         defaultValues: {
@@ -34,6 +34,7 @@ const LoginForm = () => {
         },
     })
     async function onSubmit(values: z.infer<typeof logninFormSchema>) {
+        setLoading(true)
         try {
             const result = await userLogin(values)
             if (result.success) {
@@ -41,15 +42,17 @@ const LoginForm = () => {
             }
         } catch (error: any) {
             toast.error(error.message || "something went wrong")
+        } finally {
+            setLoading(false)
         }
     }
 
 
     return (
         <div
-            className="min-h-screen w-full flex items-center justify-end bg-left bg-no-repeat"
+            className="min-h-screen w-full flex items-center justify-end bg-left bg-contain bg-no-repeat"
             style={{
-                backgroundImage: "url('/login.png')",  // replace with your image
+                backgroundImage: "url('/login.png')",  
             }}
         >
             <div className="bg-white backdrop-blur-md p-8 rounded-xl shadow-lg w-full max-w-md mr-20">
@@ -126,7 +129,7 @@ const LoginForm = () => {
 
                         <div className="mt-12">
                             {
-                                <Button type="submit" className="w-full py-2.5 px-4 text-[15px] font-medium tracking-wide rounded-md text-white focus:outline-none cursor-pointer">
+                                loading ? <ButtonLoader /> : <Button type="submit" className="w-full py-2.5 px-4 text-[15px] font-medium tracking-wide rounded-md text-white focus:outline-none cursor-pointer">
                                     Sign in
                                 </Button>
                             }
@@ -144,6 +147,7 @@ const LoginForm = () => {
 
 
                 </Form>
+                <p className="text-sm text-gray-500 text-center">Dont have an account? <Link href="/register" className="text-primary">Create New Account</Link></p>
             </div>
         </div>
     );

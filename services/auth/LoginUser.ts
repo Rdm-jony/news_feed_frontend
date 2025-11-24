@@ -25,7 +25,6 @@ export async function userLogin({
             }
         });
 
-        console.log(res);
 
         if (!res.ok) {
             const errorData = await res.json();
