@@ -53,3 +53,15 @@ export async function createPost(payload: ICreatePostPayload) {
     }
 }
 
+
+export async function toggleLike(postId: string) {
+    const res = await serverFetch.patch(`/post/like-toggle/${postId}`)
+
+    if (!res.ok) {
+        throw new Error("Like toggle failed");
+    }
+
+    const result: IResponse<null> = await res.json();
+    return result
+}
+

@@ -1,12 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
 import { IPost } from "@/types/feed.interface";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useState } from "react";
+import { fa } from "zod/locales";
+import { toggleLike } from "@/services/feed/feed";
+import { ThumbsUp } from "lucide-react";
 
-// Time formatter
 function timeAgo(dateString: string) {
     const date = new Date(dateString);
     const now = new Date();
-    const diff = (now.getTime() - date.getTime()) / 1000; // seconds
+    const diff = (now.getTime() - date.getTime()) / 1000;
 
     if (diff < 60) return "Just now";
     if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
@@ -17,83 +23,82 @@ function timeAgo(dateString: string) {
 
 export default function PostCard({ post }: { post: IPost }) {
     const author = post.author;
-    const name = `${author.firstName} ${author.lastName}`;
+
+    const [isLiked, setIsLiked] = useState(post.likes.includes(post._id as string));
+    const [likes, setLikes] = useState(post.likes.length);
+    const [loading, setLoading] = useState(false);
+
+    const handleLike = async () => {
+        if (loading) return;
+        setLoading(true);
+        const prevLiked = isLiked;
+        setIsLiked(!isLiked);
+        setLikes(prev => (prevLiked ? prev - 1 : prev + 1));
+
+        try {
+            const result = await toggleLike(post._id as string);
+            console.log(result);
+        } catch (err: any) {
+            setIsLiked(prevLiked);
+            setLikes(prev => (prevLiked ? prev + 1 : prev - 1));
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="bg-white shadow-sm rounded-xl p-4 mb-4 border border-gray-200">
-           <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-3">
-                    <Avatar>
-                        {
-                            post.author.avatarUrl && <AvatarImage src={post.author.avatarUrl} alt="Profile image" />
 
-                        }
-                        <AvatarFallback>{post.author.firstName[0]}{post.author.lastName[0]}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                        <p className="font-semibold leading-tight">{name}</p>
-                        <div className="flex items-center gap-2 text-xs text-gray-500">
-                            <span>{timeAgo(post.createdAt.toString())}</span>
-                            <span>•</span>
-                            <span className="flex items-center gap-1">
-                                🌍 Public
-                            </span>
-                        </div>
-                    </div>
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-3">
+                <Avatar>
+                    {author.avatarUrl && (
+                        <AvatarImage src={author.avatarUrl} alt="Profile" />
+                    )}
+                    <AvatarFallback>
+                        {author.firstName[0]}{author.lastName[0]}
+                    </AvatarFallback>
+                </Avatar>
+
+                <div>
+                    <p className="font-semibold">{author.firstName} {author.lastName}</p>
+                    <p className="text-xs text-gray-500">{timeAgo(post.createdAt.toString())}</p>
                 </div>
-
             </div>
 
-            {/* Content */}
             <p className="text-gray-800 mb-3">{post.content}</p>
 
             {post.images && post.images.length > 0 && (
-                <div
-                    className={`grid gap-2 ${post.images.length === 1 ? "grid-cols-1" : "grid-cols-2"
-                        }`}
-                >
+                <div className={`grid gap-2 ${post.images.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
                     {post.images.map((img, i) => (
-                        <div
-                            key={i}
-                            className="w-full h-64 relative rounded-lg overflow-hidden"
-                        >
-                            <Image
-                                src={img}
-                                fill
-                                alt="post image"
-                                className="object-cover"
-                            />
+                        <div key={i} className="w-full h-64 relative rounded-lg overflow-hidden">
+                            <Image src={img} fill className="object-cover" alt="post image" />
                         </div>
                     ))}
                 </div>
             )}
 
-            {/* Likes + Comments */}
-            <div className="flex justify-between items-center mt-3 text-sm text-gray-600">
-                <span>{post.likes.length} Likes</span>
-                <span>
-                    <span className="mr-5"><span className="font-medium">{post.comments}</span> Comments</span>
-                    <span className="mr-5"><span className="font-medium">122</span> Share</span>
-                </span>
+            <div className="flex justify-between text-sm text-gray-600 mt-3">
+                <span>{likes} Likes</span>
+                <span>{post.comments} Comments</span>
             </div>
 
             <hr className="my-3" />
 
-            {/* Buttons */}
-            <div className="flex justify-between text-gray-700">
-                {/* Like */}
-                <button className="flex items-center justify-center gap-2 w-full hover:bg-gray-100 py-2 rounded-lg">
-                    👍 <span>Like</span>
+            <div className="flex justify-between">
+                <button
+                    onClick={handleLike}
+                    className="flex items-center gap-2 w-full justify-center py-2 rounded-lg hover:bg-gray-100"
+                >
+                    {isLiked ? <ThumbsUp className="text-primary cursor-pointer" /> : <ThumbsUp className="text-gray-400 cursor-pointer" />}
                 </button>
 
-                {/* Comment */}
-                <button className="flex items-center justify-center gap-2 w-full hover:bg-gray-100 py-2 rounded-lg">
-                    💬 <span>Comment</span>
+                <button className="flex items-center gap-2 w-full justify-center py-2 rounded-lg hover:bg-gray-100">
+                    💬 Comment
                 </button>
 
-                {/* Share */}
-                <button className="flex items-center justify-center gap-2 w-full hover:bg-gray-100 py-2 rounded-lg">
-                    ↗ <span>Share</span>
+                <button className="flex items-center gap-2 w-full justify-center py-2 rounded-lg hover:bg-gray-100">
+                    ↗ Share
                 </button>
             </div>
 
