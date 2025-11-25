@@ -9,6 +9,7 @@ import { fa } from "zod/locales";
 import { toggleLike } from "@/services/feed/feed";
 import { ThumbsUp } from "lucide-react";
 import ShowLikeUser from "./ShowLikeUser";
+import CommentSection from "../comment/CommentSection";
 
 function timeAgo(dateString: string) {
     const date = new Date(dateString);
@@ -23,11 +24,13 @@ function timeAgo(dateString: string) {
 }
 
 export default function PostCard({ post }: { post: IPost }) {
-    const author = post?.author;
+    const author = post.author;
 
     const [isLiked, setIsLiked] = useState(post.likes.includes(author._id as string));
     const [likes, setLikes] = useState(post.likes.length);
     const [openLikedUser, setOpenLikedUser] = useState(false)
+    const [showComments, setShowComments] = useState(false);
+
     const [loading, setLoading] = useState(false);
 
     const handleLike = async () => {
@@ -48,7 +51,6 @@ export default function PostCard({ post }: { post: IPost }) {
         }
     };
 
-    console.log(isLiked);
 
     return (
         <div className="bg-white shadow-sm rounded-xl p-4 mb-4 border border-gray-200">
@@ -84,7 +86,10 @@ export default function PostCard({ post }: { post: IPost }) {
 
             <div className="flex justify-between text-sm text-gray-600 mt-3">
                 <span onClick={() => setOpenLikedUser(true)} className="text-primary cursor-pointer">{likes} Likes</span>
-                <span>{post.comments} Comments</span>
+
+                <span onClick={() => setShowComments(!showComments)} className="text-primary cursor-pointer">
+                    {post.comments} Comments
+                </span>
             </div>
 
             <hr className="my-3" />
@@ -106,8 +111,10 @@ export default function PostCard({ post }: { post: IPost }) {
                 </button>
             </div>
             {
-                likes > 0 && <ShowLikeUser postId={post._id as string} open={openLikedUser} setOpen={setOpenLikedUser} />
+                post.likes?.length > 0 && <ShowLikeUser postId={post._id as string} open={openLikedUser} setOpen={setOpenLikedUser} />
             }
+            {showComments && <CommentSection postId={post._id as string} />}
+
         </div>
     );
 }

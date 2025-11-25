@@ -4,6 +4,7 @@
 import { revalidatePosts } from "@/app/action";
 import { FileMetadata } from "@/hooks/use-file-upload";
 import { serverFetch } from "@/lib/server-fetch";
+import { IComment } from "@/types/comment.interface";
 import { IPost, IPrivacy } from "@/types/feed.interface";
 import { IResponse } from "@/types/response.interface";
 import { IUser } from "@/types/user.interface";
@@ -75,6 +76,32 @@ export async function getLikedUsers(postId: string) {
     const result: IResponse<IUser> = await res.json();
     return result
 }
+
+
+
+export type CreateCommentInput = {
+    postId: string;
+    text: string;
+    parentId?: string | null;
+};
+
+export async function addComment(payload: CreateCommentInput) {
+    console.log(payload);
+    const res = await serverFetch.post(`/comment/create`, {
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload)
+    })
+
+    if (!res.ok) {
+        throw new Error("comment add failed");
+    }
+
+    const result: IResponse<IComment> = await res.json();
+    return result
+}
+
 
 
 
