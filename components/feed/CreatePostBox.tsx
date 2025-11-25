@@ -11,6 +11,7 @@ import { FileMetadata } from "@/hooks/use-file-upload";
 import { toast } from "sonner";
 import { createPost } from "@/services/feed/feed";
 import { IPrivacy } from "@/types/feed.interface";
+import { mutate } from "swr";
 
 export default function CreatePostBox() {
     const [content, setContent] = useState("");
@@ -31,7 +32,8 @@ export default function CreatePostBox() {
                 setContent("")
                 setFiles([])
                 setPrivacy(IPrivacy.PUBLIC)
-                
+                mutate("/post/all")
+
             }
         } catch (err: any) {
             console.log(err);
@@ -91,6 +93,7 @@ export default function CreatePostBox() {
 
                 <Button
                     onClick={handleSubmit}
+                    
                     disabled={!canSubmit || loading}
                     className="flex items-center gap-2 cursor-pointer"
                 >

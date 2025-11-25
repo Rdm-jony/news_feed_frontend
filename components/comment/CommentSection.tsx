@@ -22,12 +22,12 @@ const CommentSection = ({ postId }: { postId: string }) => {
         if (!newComment.trim()) return;
 
 
-        console.log();
         try {
             const result = await addComment({ postId: postId, text: newComment })
             if (result.success) {
                 toast.success(result.message)
                 setNewComment("")
+                mutate("/post/all")
             }
         } catch (err: any) {
             console.log(err);

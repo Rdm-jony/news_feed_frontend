@@ -47,7 +47,6 @@ export async function createPost(payload: ICreatePostPayload) {
         });
 
         const result: IResponse<IPost> = await response.json();
-        await revalidatePosts()
         return result;
     } catch (error: any) {
         console.log("Error creating post:", error);

@@ -5,6 +5,7 @@ import { IComment } from "@/types/comment.interface";
 import { useState } from "react";
 import { toast } from "sonner";
 import { addComment } from "@/services/feed/feed";
+import { mutate } from "swr";
 
 
 
@@ -22,6 +23,8 @@ const CommentItem = ({ comment, postId }: { comment: IComment; postId: string })
             if (result.success) {
                 toast.success(result.message)
                 setReplyText("")
+                mutate("/post/all")
+                mutate(`/comment/${postId}`)
             }
         } catch (err: any) {
             console.log(err);
