@@ -52,7 +52,7 @@ export default function PostCard({ post }: { post: IPost }) {
 
 
     return (
-        <div className="bg-white shadow-sm rounded-xl p-4 mb-4 border border-gray-200">
+        <div className="bg-white dark:bg-gray-900 shadow-sm rounded-xl p-4 mb-4 border border-gray-200">
 
             {/* Header */}
             <div className="flex items-center gap-3 mb-3">

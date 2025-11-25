@@ -3,7 +3,7 @@ import YouMightLike from "./YouMightLike";
 
 const RightSidebar = () => {
     return (
-        <div>
+        <div className="space-y-5">
             <YouMightLike />
             <Friends />
         </div>

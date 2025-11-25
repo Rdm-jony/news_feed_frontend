@@ -11,7 +11,6 @@ import { FileMetadata } from "@/hooks/use-file-upload";
 import { toast } from "sonner";
 import { createPost } from "@/services/feed/feed";
 import { IPrivacy } from "@/types/feed.interface";
-import { mutate } from "swr";
 
 export default function CreatePostBox() {
     const [content, setContent] = useState("");
@@ -19,7 +18,7 @@ export default function CreatePostBox() {
     const [loading, setLoading] = useState(false);
     const [privacy, setPrivacy] = useState<IPrivacy.PUBLIC | IPrivacy.PRIVATE>(IPrivacy.PUBLIC);
 
-    const canSubmit = content.trim().length > 0 || files.length > 0;
+    const canSubmit = content.trim().length > 0;
 
     const handleSubmit = async () => {
         if (!canSubmit) return;
@@ -43,10 +42,10 @@ export default function CreatePostBox() {
     };
 
     return (
-        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-4">
+        <div className="bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm border border-gray-200 mb-4">
             <div className="flex items-start gap-3">
                 <Avatar>
-                    <AvatarFallback>kk</AvatarFallback>
+                    <AvatarFallback>Me</AvatarFallback>
                 </Avatar>
 
                 <Textarea

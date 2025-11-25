@@ -41,10 +41,12 @@ const LoginForm = () => {
             if (result.success) {
                 toast.success(result.message)
                 router.push("/")
+            } else {
+                toast.error(result.message || "something went wrong")
             }
         } catch (error: any) {
             console.log(error);
-            toast.error(error.message || "something went wrong")
+
         } finally {
             setLoading(false)
         }
@@ -53,12 +55,12 @@ const LoginForm = () => {
 
     return (
         <div
-            className="min-h-screen w-full flex items-center justify-end bg-left bg-contain bg-no-repeat"
+            className="min-h-screen w-full flex items-center justify-end lg:bg-left bg-center bg-contain bg-no-repeat"
             style={{
                 backgroundImage: "url('/login.png')",
             }}
         >
-            <div className="bg-white backdrop-blur-md p-8 rounded-xl shadow-lg w-full max-w-md mr-20">
+            <div className="bg-white dark:bg-gray-900 backdrop-blur-md p-8 rounded-xl shadow-lg w-full max-w-md lg:mr-20">
                 <Image
                     src="/logo.svg"
                     alt="Logo"

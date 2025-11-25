@@ -26,7 +26,7 @@ export default function SuggestedPeople() {
         <div className="w-full  rounded-xl shadow-sm p-4">
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-semibold text-gray-900">Suggested People</h2>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Suggested People</h2>
                 <button className="text-primary text-sm font-medium hover:underline">
                     See All
                 </button>

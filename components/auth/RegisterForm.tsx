@@ -72,12 +72,12 @@ const RegisterForm = () => {
 
     return (
         <div
-            className="min-h-screen w-full flex items-center bg-contain justify-end bg-left bg-no-repeat"
+            className="min-h-screen w-full flex items-center bg-contain justify-end lg:bg-left bg-center bg-no-repeat"
             style={{
                 backgroundImage: "url('/registration.png')",
             }}
         >
-            <div className="bg-white backdrop-blur-md p-8 rounded-xl shadow-lg w-full max-w-md mr-20">
+            <div className="bg-white dark:bg-gray-900 backdrop-blur-md p-8 rounded-xl shadow-lg w-full max-w-md lg:mr-20">
                 <Image
                     src="/logo.svg"
                     alt="Logo"

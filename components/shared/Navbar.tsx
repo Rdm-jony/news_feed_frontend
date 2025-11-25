@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/popover"
 import Image from "next/image"
 import Profile from "./Profile"
+import { ModeToggle } from "./mode-toggle"
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
@@ -108,10 +109,10 @@ export default function Navbar() {
               />
             </a>
             {/* Search form */}
-            <div className="relative w-100">
+            <div className="relative w-100 lg:block hidden">
               <Input
                 id={id}
-                className="peer h-10 ps-8 pe-2 bg-gray-100 rounded-full"
+                className="peer h-10 ps-8 pe-2 bg-gray-100 dark:bg-gray-900 rounded-full"
                 placeholder="Input Search Text.."
                 type="search"
               />
@@ -138,7 +139,8 @@ export default function Navbar() {
           </div>
         </div>
         {/* Right side */}
-        <div className="flex items-center gap-2 max-md:hidden">
+        <div className="flex items-center gap-5">
+          <ModeToggle />
           <Profile />
         </div>
       </div>

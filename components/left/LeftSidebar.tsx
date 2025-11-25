@@ -4,7 +4,7 @@ import SuggestedPeople from "./Suggested";
 
 const LeftSidebar = () => {
     return (
-        <div>
+        <div className="space-y-5">
             <Explore />
             <SuggestedPeople />
             <Events />

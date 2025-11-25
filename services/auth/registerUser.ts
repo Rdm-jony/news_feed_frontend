@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 import { serverFetch } from "@/lib/server-fetch";
 import { userLogin } from "./LoginUser";
@@ -25,7 +26,10 @@ export async function userRegister({
 
         if (!res.ok) {
             const errorData = await res.json();
-            throw new Error(errorData.message || "Login failed");
+            return {
+                success: false,
+                message: errorData.message || "Registration failed",
+            };
         }
 
         const result: IResponse<IUser> = await res.json();
@@ -34,8 +38,8 @@ export async function userRegister({
         }
 
         return result;
-    } catch (error) {
+    } catch (error: any) {
         console.error("Register error:", error);
-        throw error;
+        return { success: false, message: error.message || "Registration failed" };
     }
 }

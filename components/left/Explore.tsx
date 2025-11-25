@@ -25,7 +25,7 @@ const menuItems = [
 
 export default function Explore() {
     return (
-        <div className=" bg-white shadow-md rounded-xl p-3 space-y-1">
+        <div className=" bg-white dark:bg-gray-900 shadow-md rounded-xl p-3 space-y-1">
             <p className="font-semibold px-3 py-3">Explore</p>
             {menuItems.map((item, idx) => {
                 const Icon = item.icon;

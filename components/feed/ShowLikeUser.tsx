@@ -13,7 +13,6 @@ import {
 import { useEffect, useState } from "react";
 import { IUser } from "@/types/user.interface";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { serverFetch } from "@/lib/server-fetch";
 import { getLikedUsers } from "@/services/feed/feed";
 
 export default function ShowLikeUser({

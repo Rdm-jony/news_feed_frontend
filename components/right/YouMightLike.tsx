@@ -13,9 +13,9 @@ const suggestions = [
 
 export default function YouMightLike() {
   return (
-    <div className="w-full bg-white rounded-xl shadow-sm p-4">
+    <div className="w-full bg-white dark:bg-gray-900 rounded-xl shadow-sm p-4">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold text-gray-900">You Might Like</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">You Might Like</h2>
         <button className="text-primary text-sm font-medium hover:underline">
           See All
         </button>
@@ -38,7 +38,7 @@ export default function YouMightLike() {
               </div>
 
               <div>
-                <span className="text-sm font-medium text-gray-900 block">
+                <span className="text-sm font-medium text-gray-900 dark:text-white block">
                   {user.name}
                 </span>
                 <span className="text-xs text-gray-500 block">

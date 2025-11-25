@@ -22,9 +22,9 @@ const events = [
 
 export default function Events() {
     return (
-        <div className="w-full bg-white p-4 rounded-xl shadow-sm">
+        <div className="w-full bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm">
             <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                     <Calendar size={18} className="text-primary" />
                     Events
                 </h2>
@@ -57,7 +57,7 @@ export default function Events() {
                                         {event.dateMonth}
                                     </p>
                                 </div>
-                                <h3 className="font-semibold text-gray-900 text-sm mb-1">
+                                <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">
                                     {event.title}
                                 </h3>
                             </div>

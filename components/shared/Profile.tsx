@@ -49,13 +49,9 @@ export default function Profile() {
   }, []);
 
   const handleLogout = async () => {
-    try {
-      await logoutUser();
-      toast.success("Logged out successfully");
-    } catch (error) {
-      console.error(error);
-      toast.error("Logout failed");
-    }
+
+    await logoutUser();
+
   };
 
   if (loading) return null;

@@ -43,10 +43,10 @@ const friendsData = [
 
 export default function Friends() {
     return (
-        <div className="w-full bg-white rounded-xl shadow-sm p-4">
+        <div className="w-full bg-white dark:bg-gray-900 rounded-xl shadow-sm p-4">
             {/* Header */}
             <div className="flex justify-between items-center mb-3">
-                <h2 className="text-lg font-semibold text-gray-900">Your Friends</h2>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Your Friends</h2>
                 <button className="text-blue-600 text-sm font-medium hover:underline">
                     See All
                 </button>
@@ -56,7 +56,7 @@ export default function Friends() {
             <input
                 type="text"
                 placeholder="Search friends..."
-                className="w-full mb-4 px-3 py-2 border rounded-lg text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full mb-4 px-3 py-2 border rounded-lg text-sm  focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
 
             {/* Friends List */}
@@ -64,7 +64,7 @@ export default function Friends() {
                 {friendsData.map((user, idx) => (
                     <div
                         key={idx}
-                        className="bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition"
+                        className="b p-3 rounded-lg hover:bg-gray-100 transition"
                     >
                         {/* Profile Row */}
                         <div className="flex items-center gap-3">
@@ -78,7 +78,7 @@ export default function Friends() {
                             </div>
 
                             <div>
-                                <h4 className="text-sm font-semibold text-gray-900">
+                                <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
                                     {user.name}
                                 </h4>
                                 <p className="text-xs text-gray-500">{user.role}</p>
