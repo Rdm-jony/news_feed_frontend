@@ -43,6 +43,7 @@ const LoginForm = () => {
                 router.push("/")
             }
         } catch (error: any) {
+            console.log(error);
             toast.error(error.message || "something went wrong")
         } finally {
             setLoading(false)
