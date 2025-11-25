@@ -6,6 +6,7 @@ import { FileMetadata } from "@/hooks/use-file-upload";
 import { serverFetch } from "@/lib/server-fetch";
 import { IPost, IPrivacy } from "@/types/feed.interface";
 import { IResponse } from "@/types/response.interface";
+import { IUser } from "@/types/user.interface";
 
 export async function getFeeds() {
     try {
@@ -64,4 +65,16 @@ export async function toggleLike(postId: string) {
     const result: IResponse<null> = await res.json();
     return result
 }
+export async function getLikedUsers(postId: string) {
+    const res = await serverFetch.get(`/post/liked/${postId}`)
+
+    if (!res.ok) {
+        throw new Error("Like toggle failed");
+    }
+
+    const result: IResponse<IUser> = await res.json();
+    return result
+}
+
+
 
