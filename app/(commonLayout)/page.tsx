@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import CreatePostBox from "@/components/feed/CreatePostBox";
 import PostCard from "@/components/feed/PostCard";
 import { getFeeds } from "@/services/feed/feed";
