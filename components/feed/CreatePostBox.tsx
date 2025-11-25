@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useCallback, useState } from "react";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import MaultiFileUploader from "../shared/MultiFileUploader";
@@ -32,7 +32,6 @@ export default function CreatePostBox() {
                 setContent("")
                 setFiles([])
                 setPrivacy(IPrivacy.PUBLIC)
-                mutate("/post/all")
 
             }
         } catch (err: any) {
@@ -88,10 +87,13 @@ export default function CreatePostBox() {
             <hr className="my-4" />
 
             <div className="flex justify-between items-center gap-x-5 text-gray-700 text-sm">
-                <MaultiFileUploader onChange={(files) => setFiles(files)} />
+
+                <MaultiFileUploader
+                    onChange={useCallback((files) => setFiles(files), [])}
+                />
 
                 <Button
-                    onClick={()=>handleSubmit()}
+                    onClick={() => handleSubmit()}
 
                     disabled={!canSubmit || loading}
                     className="flex items-center gap-2 cursor-pointer"

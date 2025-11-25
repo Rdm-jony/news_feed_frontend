@@ -47,6 +47,8 @@ export async function createPost(payload: ICreatePostPayload) {
         });
 
         const result: IResponse<IPost> = await response.json();
+
+        await revalidatePosts()
         return result;
     } catch (error: any) {
         console.log("Error creating post:", error);
@@ -85,7 +87,6 @@ export type CreateCommentInput = {
 };
 
 export async function addComment(payload: CreateCommentInput) {
-    console.log(payload);
     const res = await serverFetch.post(`/comment/create`, {
         headers: {
             "Content-Type": "application/json",
@@ -98,9 +99,20 @@ export async function addComment(payload: CreateCommentInput) {
     }
 
     const result: IResponse<IComment> = await res.json();
+
+    await revalidatePosts()
+
     return result
 }
 
 
+export async function getComments(postId: string) {
+    const res = await serverFetch.get(`/comment/${postId}`)
 
+    if (!res.ok) {
+        throw new Error("failed");
+    }
 
+    const result: IResponse<IComment> = await res.json();
+    return result
+}

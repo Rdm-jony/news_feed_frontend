@@ -23,8 +23,7 @@ const CommentItem = ({ comment, postId }: { comment: IComment; postId: string })
             if (result.success) {
                 toast.success(result.message)
                 setReplyText("")
-                mutate("/post/all")
-                mutate(`/comment/${postId}`)
+                
             }
         } catch (err: any) {
             console.log(err);

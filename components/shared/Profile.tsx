@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import {
   LogOutIcon,
   ChevronDownIcon,
@@ -22,35 +24,41 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import useSWR from "swr";
-import { serverFetch } from "@/lib/server-fetch";
 import { logoutUser } from "@/lib/logOut";
-import { IUser } from "@/types/user.interface";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-
-const fetcher = (url: string) =>
-  serverFetch.get(url, { credentials: "include" }).then((res) => res.json());
+import { getMe } from "@/services/user/user";
+import { IUser } from "@/types/user.interface";
 
 export default function Profile() {
-  const router = useRouter();
+  const [user, setUser] = useState<IUser | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const { data, error } = useSWR<{ data: IUser }>("/user/me", fetcher);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await getMe();
+        setUser(res?.data as IUser || null);
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const user = data?.data;
+    fetchUser();
+  }, []);
 
   const handleLogout = async () => {
     try {
       await logoutUser();
       toast.success("Logged out successfully");
-      router.push("/login");
     } catch (error) {
       console.error(error);
       toast.error("Logout failed");
     }
   };
 
-  if (error) return null;
+  if (loading) return null;
   if (!user) return null;
 
   return (
@@ -71,7 +79,6 @@ export default function Profile() {
           </Avatar>
 
           <p>{user.firstName}</p>
-
           <ChevronDownIcon size={16} className="opacity-60" />
         </Button>
       </DropdownMenuTrigger>

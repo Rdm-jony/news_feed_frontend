@@ -1,4 +1,6 @@
-"use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -6,44 +8,83 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import useSWR from "swr";
-import { serverFetch } from "@/lib/server-fetch";
+} from "@/components/ui/dropdown-menu";
+
+import { useEffect, useState } from "react";
 import { IUser } from "@/types/user.interface";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { serverFetch } from "@/lib/server-fetch";
+import { getLikedUsers } from "@/services/feed/feed";
 
-const fetcher = (url: string) => serverFetch.get(url, { credentials: "include" }).then(res => res.json());
+export default function ShowLikeUser({
+    open,
+    setOpen,
+    postId,
+}: {
+    open: boolean;
+    setOpen: (bool: boolean) => void;
+    postId: string;
+}) {
+    const [users, setUsers] = useState<IUser[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
-const ShowLikeUser = ({ open, setOpen, postId }: { open: boolean, setOpen: (bool: boolean) => void, postId: string }) => {
+    useEffect(() => {
+        if (!open) return;
 
-    const { data: result } = useSWR(`/post/liked/${postId}`, fetcher);
+        const fetchLikedUsers = async () => {
+            try {
+                setLoading(true);
+                setError("");
+
+                const res = await getLikedUsers(postId);
+                setUsers(res?.data as IUser[] || []);
+            } catch (err: any) {
+                setError("Failed to load users");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchLikedUsers();
+    }, [open, postId]);
 
     return (
         <DropdownMenu open={open} onOpenChange={setOpen}>
-            <DropdownMenuTrigger></DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuLabel>Like by user</DropdownMenuLabel>
+            <DropdownMenuTrigger />
+
+            <DropdownMenuContent align="center" className="w-56">
+                <DropdownMenuLabel>Liked by</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {
-                    result?.data.map((user: IUser) => <DropdownMenuItem key={user._id}>
+
+                {loading && <DropdownMenuItem disabled>Loading...</DropdownMenuItem>}
+
+                {error && <DropdownMenuItem disabled>{error}</DropdownMenuItem>}
+
+                {!loading && users.length === 0 && (
+                    <DropdownMenuItem disabled>No likes yet</DropdownMenuItem>
+                )}
+
+                {users.map((user) => (
+                    <DropdownMenuItem key={user._id} className="cursor-default">
                         <div className="flex items-center gap-2">
                             <Avatar>
                                 {user.avatarUrl && (
                                     <AvatarImage src={user.avatarUrl} alt="Profile" />
                                 )}
                                 <AvatarFallback>
-                                    {user.firstName[0]}{user.lastName[0]}
+                                    {user.firstName[0]}
+                                    {user.lastName[0]}
                                 </AvatarFallback>
                             </Avatar>
-                            <p className="text-sm">{user.firstName} {user.lastName}</p>
 
+                            <p className="text-sm">
+                                {user.firstName} {user.lastName}
+                            </p>
                         </div>
                     </DropdownMenuItem>
-
-                    )}
+                ))}
             </DropdownMenuContent>
         </DropdownMenu>
     );
-};
-
-export default ShowLikeUser;
+}
