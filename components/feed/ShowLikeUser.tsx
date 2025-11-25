@@ -1,3 +1,4 @@
+"use client"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -16,7 +17,6 @@ const fetcher = (url: string) => serverFetch.get(url, { credentials: "include" }
 const ShowLikeUser = ({ open, setOpen, postId }: { open: boolean, setOpen: (bool: boolean) => void, postId: string }) => {
 
     const { data: result } = useSWR(`/post/liked/${postId}`, fetcher);
-    console.log(result?.data);
 
     return (
         <DropdownMenu open={open} onOpenChange={setOpen}>

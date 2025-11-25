@@ -1,82 +1,96 @@
+"use client";
+
 import {
-  BoltIcon,
-  BookOpenIcon,
-  ChevronDownIcon,
-  Layers2Icon,
   LogOutIcon,
-  PinIcon,
-  UserPenIcon,
-} from "lucide-react"
+  ChevronDownIcon,
+} from "lucide-react";
 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/avatar";
+
+import { Button } from "@/components/ui/button";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { getMe } from "@/services/user/user"
-import { IUser } from "@/types/user.interface"
-import { logoutUser } from "@/lib/logOut"
-import { redirect } from "next/dist/server/api-utils"
+} from "@/components/ui/dropdown-menu";
 
-export default async function Profile() {
-  const result = await getMe()
-  const user: IUser = result?.data as IUser
+import useSWR from "swr";
+import { serverFetch } from "@/lib/server-fetch";
+import { logoutUser } from "@/lib/logOut";
+import { IUser } from "@/types/user.interface";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+const fetcher = (url: string) =>
+  serverFetch.get(url, { credentials: "include" }).then((res) => res.json());
+
+export default function Profile() {
+  const router = useRouter();
+
+  const { data, error } = useSWR<{ data: IUser }>("/user/me", fetcher);
+
+  const user = data?.data;
 
   const handleLogout = async () => {
     try {
-      await logoutUser()
-
+      await logoutUser();
+      toast.success("Logged out successfully");
+      router.push("/login");
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      toast.error("Logout failed");
     }
-  }
+  };
+
+  if (error) return null;
+  if (!user) return null;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
+        <Button
+          variant="ghost"
+          className="h-auto p-0 gap-2 hover:bg-transparent flex items-center"
+        >
           <Avatar>
             {user.avatarUrl && (
               <AvatarImage src={user.avatarUrl} alt="Profile" />
             )}
             <AvatarFallback>
-              {user.firstName[0]}{user.lastName[0]}
+              {user.firstName?.[0]}
+              {user.lastName?.[0]}
             </AvatarFallback>
           </Avatar>
-          <p>Jony Das</p>
-          <ChevronDownIcon
-            size={16}
-            className="opacity-60"
-            aria-hidden="true"
-          />
+
+          <p>{user.firstName}</p>
+
+          <ChevronDownIcon size={16} className="opacity-60" />
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent className="max-w-64">
-        <DropdownMenuLabel className="flex min-w-0 flex-col">
-          <span className="truncate text-sm font-medium text-foreground">
+        <DropdownMenuLabel>
+          <p className="text-sm font-medium">
             {user.firstName} {user.lastName}
-          </span>
-          <span className="truncate text-xs font-normal text-muted-foreground">
-            {user.email}
-          </span>
+          </p>
+          <p className="text-xs opacity-70">{user.email}</p>
         </DropdownMenuLabel>
+
         <DropdownMenuSeparator />
 
-
-        <DropdownMenuItem onClick={() => handleLogout()}>
-          <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
+        <DropdownMenuItem onClick={handleLogout}>
+          <LogOutIcon size={16} className="opacity-60" />
           <span>Logout</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

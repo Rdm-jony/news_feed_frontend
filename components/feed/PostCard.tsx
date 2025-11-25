@@ -5,7 +5,6 @@ import { IPost } from "@/types/feed.interface";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useState } from "react";
-import { fa } from "zod/locales";
 import { toggleLike } from "@/services/feed/feed";
 import { ThumbsUp } from "lucide-react";
 import ShowLikeUser from "./ShowLikeUser";

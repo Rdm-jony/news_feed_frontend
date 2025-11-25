@@ -47,7 +47,6 @@ export default function CreatePostBox() {
         <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-4">
             <div className="flex items-start gap-3">
                 <Avatar>
-                    <AvatarImage src="/" alt="Profile image" />
                     <AvatarFallback>kk</AvatarFallback>
                 </Avatar>
 
@@ -92,8 +91,8 @@ export default function CreatePostBox() {
                 <MaultiFileUploader onChange={(files) => setFiles(files)} />
 
                 <Button
-                    onClick={handleSubmit}
-                    
+                    onClick={()=>handleSubmit()}
+
                     disabled={!canSubmit || loading}
                     className="flex items-center gap-2 cursor-pointer"
                 >

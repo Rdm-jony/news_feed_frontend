@@ -61,7 +61,7 @@ export default function MaultiFileUploader({ onChange }: MultiFileUploaderProps)
                     aria-label="Upload image file"
                 />
 
-                <Button variant="outline" className="bg-primary/10" onClick={openFileDialog}>
+                <Button variant="outline" className="bg-primary/10" onClick={()=>openFileDialog()}>
                     <BookImage />
                     Photo
                 </Button>
@@ -118,7 +118,7 @@ export default function MaultiFileUploader({ onChange }: MultiFileUploaderProps)
                     {/* Remove all files button */}
                     {files.length > 1 && (
                         <div>
-                            <Button size="sm" variant="outline" onClick={clearFiles}>
+                            <Button size="sm" variant="outline" onClick={()=>clearFiles()}>
                                 Remove all files
                             </Button>
                         </div>

@@ -4,6 +4,7 @@ import { IPost } from "@/types/feed.interface";
 import PostCard from "./PostCard";
 import useSWR from "swr";
 import { serverFetch } from "@/lib/server-fetch";
+import CreatePostBox from "./CreatePostBox";
 
 const fetcher = (url: string) => serverFetch.get(url, { credentials: "include", next: { tags: ["posts"] } }).then(res => res.json());
 
@@ -21,6 +22,8 @@ const FeedList = ({ initialPosts }: Props) => {
 
     return (
         <>
+            <CreatePostBox />
+
             {posts.map(post => (
                 <PostCard key={post._id} post={post} />
             ))}
